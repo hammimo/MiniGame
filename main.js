@@ -1,5 +1,6 @@
 const field = document.querySelector('.game__filed');
 const fieldRect = field.getBoundingClientRect();
+const CarrotSize = 80;
 const playBtn = document.querySelector('.play__btn');
 const timer = document.querySelector('.play__timer');
 const countCarrot = document.querySelector('.carrot__num');
@@ -32,15 +33,15 @@ function startTimer (){
 
 function initGame(){
     console.log(fieldRect);
-    addItem('carrot', 5 , 'img/carrot/png');
-    addItem('bug', 5 , 'img/bug/png');
+    addItem('carrot', 5 , 'img/carrot.png');
+    addItem('bug', 5 , 'img/bug.png');
 }
 
-function addItem(className, count, imgPath){
+function addItem(className, count,imgPath){
     const x1 = 0;
     const y1 = 0;
-    const x2 = fieldRect.width;
-    const y2 = fieldRect.height;
+    const x2 = fieldRect.width - CarrotSize;
+    const y2 = fieldRect.height - CarrotSize;
     for (let i = 0; i < count; i++) {
         const item = document.createElement('img');
         item.setAttribute('class', className);
