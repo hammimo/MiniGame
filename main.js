@@ -5,7 +5,6 @@ const stopBtn = document.querySelector('.stop__btn');
 
 playBtn.addEventListener('click', () => {
     startTimer();
-    changeBtn();
 });
 
 
@@ -29,10 +28,5 @@ function startTimer (){
     }, 1000);
 }
 
-// changeBtn
-function changeBtn(){
-    if(stopBtn.style.display === 'none'){
-        stopBtn.style.display = 'block';
-    }
-}
+
 

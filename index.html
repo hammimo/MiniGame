@@ -10,14 +10,18 @@
     <title>find a carrot!</title>
 </head>
 <body>
-    <div class="game">
-        <img class="main__img" src="/img/background.png" alt="background">
         <section class="game__main">
-            <button class="play__btn"><i class="fa-solid fa-play"></i></button>
-            <button class="stop__btn"><i class="fa-solid fa-square"></i></button>
-            <input type="text" class="play__timer" value="" readonly>
-            <div class="carrot__num">10</div>
+            <header class="game__header">
+                <button class="play__btn"><i class="fa-solid fa-play"></i></button>
+                <input type="text" class="play__timer" value="" readonly>
+                <div class="carrot__num">10</div>
+            </header>
+            <section class="geme__filed">
+                <div class="replay replay--hide">
+                    <button class="replay__btn"><i class="fa-solid fa-reply"></i></button>
+                    <span class="replay__text">Replay❓</span>
+                </div>
+            </section>
         </section>
-    </div>
 </body>
 </html>
