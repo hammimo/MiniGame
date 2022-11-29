@@ -97,6 +97,7 @@ body {
 }
 
 .replay__text {
+    display: block;
     color: white;
     font-size: 30px;
 }
