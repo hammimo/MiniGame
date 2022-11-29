@@ -17,6 +17,7 @@ let started = false; // 게임이 시작되었는지 안되었는지
 let score = 0; //최종적인 점수
 let timer = undefined;
 
+field.addEventListener('click', onFiledClick);
 
 playBtn.addEventListener('click', () => {
     if(started){
@@ -24,11 +25,15 @@ playBtn.addEventListener('click', () => {
     } else {
         startGame();
     }
-    started = !started;
 });
 
+popUpBtn.addEventListener('click', ()=> {
+    startGame();
+    hidePopup();
+});
 
 function startGame(){
+    started = true;
     initGame();
     showStopButton();
     showTimerAndScore();
@@ -36,9 +41,17 @@ function startGame(){
 };
 
 function stopGame(){
+    started = false;
     hideGameButton();
     showPopUpWithText('Replay❓');
-    stopGameTimer();
+    stopGameTimer(); //실행안됨
+};
+
+function finishGame(win){
+    started = false;
+    hideGameButton();
+    showPopUpWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
+
 };
 
 function startGameTimer(){
@@ -47,6 +60,7 @@ function startGameTimer(){
     const timer = setInterval(()=> {
         if(remainingTimeSec <= 0) {
             clearInterval(timer);
+            finishGame(CarrotCount === score);
             return;
         } 
         updateTimerText(--remainingTimeSec);
@@ -64,12 +78,16 @@ function showPopUpWithText(text){
     gamePopup.classList.remove('replay--hide');
 }
 
-function stopGameTimer(){
+function hidePopup(){
+    gamePopup.classList.add('replay--hide');
+}
+
+function stopGameTimer(){ //실행되지 않음
     clearInterval(timer);
 }
 
 function showStopButton(){
-    const icon = playBtn.querySelector('.fa-play');
+    const icon = playBtn.querySelector('.fa-solid');
     icon.classList.add('fa-stop');
     icon.classList.remove('fa-play');
 }
@@ -90,6 +108,29 @@ function initGame(){
     addItem('bug', BugCount , 'img/bug.png');
 }
 
+function onFiledClick(event){
+    if(!started){
+        return;
+    }
+    const target = event.target;
+    if(target.matches('.carrot')){
+        //carrot!!
+        target.remove();
+        score++;
+        updateScoreBoard();
+        if(score === CarrotCount){
+            finishGame(true);
+        }
+    } else if (target.matches('.bug')){
+        //bug!! 
+        stopGameTimer();
+        finishGame(false);
+    }
+}
+
+function updateScoreBoard(){
+    gameScore.innerText = CarrotCount - score;
+}
 function addItem(className, count,imgPath){
     const x1 = 0;
     const y1 = 0;
