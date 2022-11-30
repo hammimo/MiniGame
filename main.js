@@ -11,6 +11,12 @@ const gamePopup = document.querySelector('.game__pop_up');
 const popUpText = document.querySelector('.replay__text');
 const popUpBtn = document.querySelector('.replay__btn');
 
+const carrotSound = new Audio('sound/carrot_pull.mp3');
+const bgSound = new Audio('sound/bg.mp3');
+const bugPullSound = new Audio ('sound/bug_pull.mp3');
+const alertSound = new Audio('sound/alert.wav');
+const gameWinSound = new Audio ('sound/game_win.mp3');
+
 
 // 게임의 상태을 기억하는 부분
 let started = false; // 게임이 시작되었는지 안되었는지
@@ -35,6 +41,7 @@ popUpBtn.addEventListener('click', ()=> {
 function startGame(){
     started = true;
     initGame();
+    playSound(bgSound);
     showStopButton();
     showTimerAndScore();
     startGameTimer();
@@ -45,11 +52,19 @@ function stopGame(){
     hideGameButton();
     showPopUpWithText('Replay❓'); 
     stopGameTimer(); 
+    stopSound(bgSound);
+    playSound(alertSound);
 };
 
 function finishGame(win){
     started = false;
     hideGameButton();
+    if(win){
+        playSound(gameWinSound);
+    }else {
+        playSound(bugPullSound);
+    }
+    stopSound(bgSound);
     showPopUpWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
 };
 
@@ -60,7 +75,7 @@ function startGameTimer(){
         if(remainingTimeSec <= 0) {
             clearInterval(timer);
             finishGame(CarrotCount === score);
-            return;
+           return;
         } 
         updateTimerText(--remainingTimeSec);
     }, 1000);
@@ -117,15 +132,26 @@ function onFiledClick(event){
         //carrot!!
         target.remove();
         score++;
+        playSound(carrotSound);
         updateScoreBoard();
         if(score === CarrotCount){
             finishGame(true);
         }
     } else if (target.matches('.bug')){
         //bug!! 
+        playSound(bugPullSound);
         stopGameTimer();
         finishGame(false);
     }
+}
+
+function playSound(sound){
+    sound.currentTime = 0;
+    sound.play();
+}
+
+function stopSound(sound){
+    sound.pause();
 }
 
 function updateScoreBoard(){
