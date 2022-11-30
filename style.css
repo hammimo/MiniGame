@@ -47,6 +47,8 @@ body {
     margin-bottom: 5px;
     border: 2px solid black;
     visibility: hidden;
+    user-select: none;
+    cursor: auto;
 }
 .game__score {
     color: white;
@@ -58,6 +60,8 @@ body {
     border-radius: 50%;
     border: 2px solid black;
     visibility: hidden;
+    user-select: none;
+    cursor: auto;
 
 }
 
@@ -102,4 +106,12 @@ body {
     font-size: 30px;
 }
 
+.carrot,
+.bug {
+    transition: transform 100ms ease-in;
+}
 
+.carrot:hover,
+.bug:hover {
+    transform: scale(1.1);
+}

@@ -104,6 +104,7 @@ function showStopButton(){
     const icon = playBtn.querySelector('.fa-solid');
     icon.classList.add('fa-stop');
     icon.classList.remove('fa-play');
+    playBtn.style.visibility ='visible';
 }
 
 function hideGameButton(){
