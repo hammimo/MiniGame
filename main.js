@@ -43,21 +43,20 @@ function startGame(){
 function stopGame(){
     started = false;
     hideGameButton();
-    showPopUpWithText('Replay❓');
-    stopGameTimer(); //실행안됨
+    showPopUpWithText('Replay❓'); 
+    stopGameTimer(); 
 };
 
 function finishGame(win){
     started = false;
     hideGameButton();
     showPopUpWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
-
 };
 
 function startGameTimer(){
     let remainingTimeSec = GameDurationSec;
     updateTimerText(remainingTimeSec);
-    const timer = setInterval(()=> {
+    timer = setInterval(()=> {
         if(remainingTimeSec <= 0) {
             clearInterval(timer);
             finishGame(CarrotCount === score);
@@ -82,7 +81,7 @@ function hidePopup(){
     gamePopup.classList.add('replay--hide');
 }
 
-function stopGameTimer(){ //실행되지 않음
+function stopGameTimer(){ 
     clearInterval(timer);
 }
 
@@ -103,6 +102,7 @@ function showTimerAndScore(){
 
 function initGame(){
     field.innerHTML = ' '; //새로 시작할때마다 텅텅빈 상태에서 아이템 생성
+    score = 0;
     gameScore.innerText = CarrotCount;
     addItem('carrot', CarrotCount , 'img/carrot.png');
     addItem('bug', BugCount , 'img/bug.png');
