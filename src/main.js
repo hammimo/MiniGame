@@ -1,4 +1,6 @@
 import Popup from './popup.js';
+import Field from './field.js';
+import * as sound from './sound.js';
 
 const field = document.querySelector('.game__filed');
 const fieldRect = field.getBoundingClientRect();
@@ -10,11 +12,7 @@ const playBtn = document.querySelector('.play__btn');
 const GameTimer = document.querySelector('.play__timer');
 const gameScore = document.querySelector('.game__score');
 
-const carrotSound = new Audio('sound/carrot_pull.mp3');
-const bgSound = new Audio('sound/bg.mp3');
-const bugPullSound = new Audio ('sound/bug_pull.mp3');
-const alertSound = new Audio('sound/alert.wav');
-const gameWinSound = new Audio ('sound/game_win.mp3');
+
 
 
 // 게임의 상태을 기억하는 부분
@@ -25,9 +23,27 @@ let timer = undefined;
 const gameFinishBanner = new Popup();
 gameFinishBanner.setClickListener(()=>{
     startGame();
-})
+});
 
-field.addEventListener('click', onFiledClick);
+const gamefield = new Field(CarrotCount, BugCount);
+gamefield.setClickListener(onItemClick);
+
+function onItemClick(item){
+    if(!started){
+        return;
+    }
+    if(item ==='carrot'){
+        score++;
+        updateScoreBoard();
+        if(score === CarrotCount){
+            finishGame(true);
+        }
+    } else if (item === ('bug')){
+        finishGame(false);
+    }
+}
+
+field.addEventListener('click', onItemClick);
 
 playBtn.addEventListener('click', () => {
     if(started){
@@ -41,7 +57,7 @@ playBtn.addEventListener('click', () => {
 function startGame(){
     started = true;
     initGame();
-    playSound(bgSound);
+    sound.playBackGround();
     showStopButton();
     showTimerAndScore();
     startGameTimer();
@@ -52,19 +68,19 @@ function stopGame(){
     hideGameButton();
     gameFinishBanner.showWithText('Replay❓');
     stopGameTimer(); 
-    stopSound(bgSound);
-    playSound(alertSound);
+    sound.stopPlayBackGround();
+    sound.playAlert();
 };
 
 function finishGame(win){
     started = false;
     hideGameButton();
     if(win){
-        playSound(gameWinSound);
+        sound.playWin();
     }else {
-        playSound(bugPullSound);
+        sound.playBug();
     }
-    stopSound(bgSound);
+    sound.stopPlayBackGround();
     gameFinishBanner.showWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
 };
 
@@ -109,70 +125,14 @@ function showTimerAndScore(){
 }
 
 function initGame(){
-    field.innerHTML = ' '; //새로 시작할때마다 텅텅빈 상태에서 아이템 생성
     score = 0;
     gameScore.innerText = CarrotCount;
-    addItem('carrot', CarrotCount , 'img/carrot.png');
-    addItem('bug', BugCount , 'img/bug.png');
-}
-
-function onFiledClick(event){
-    if(!started){
-        return;
-    }
-    const target = event.target;
-    if(target.matches('.carrot')){
-        //carrot!!
-        target.remove();
-        score++;
-        playSound(carrotSound);
-        updateScoreBoard();
-        if(score === CarrotCount){
-            finishGame(true);
-        }
-    } else if (target.matches('.bug')){
-        //bug!! 
-        playSound(bugPullSound);
-        stopGameTimer();
-        finishGame(false);
-    }
-}
-
-function playSound(sound){
-    sound.currentTime = 0;
-    sound.play();
-}
-
-function stopSound(sound){
-    sound.pause();
+    gamefield.init();
 }
 
 function updateScoreBoard(){
     gameScore.innerText = CarrotCount - score;
 }
-function addItem(className, count,imgPath){
-    const x1 = 0;
-    const y1 = 0;
-    const x2 = fieldRect.width - CarrotSize;
-    const y2 = fieldRect.height - CarrotSize;
-    for (let i = 0; i < count; i++) {
-        const item = document.createElement('img');
-        item.setAttribute('class', className);
-        item.setAttribute('src', imgPath);
-        item.style.position = 'absolute';
-        const x = randomNumber(x1, x2);
-        const y = randomNumber(y1, y2);
-        item.style.left =`${x}px`;
-        item.style.top = `${y}px`
-        field.appendChild(item);
-    }
-}
-
-function randomNumber(min, max) {
-    return Math.random() * (max - min) + min;
-}
-
-
 
 
 
