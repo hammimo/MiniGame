@@ -1,3 +1,5 @@
+import Popup from './popup.js';
+
 const field = document.querySelector('.game__filed');
 const fieldRect = field.getBoundingClientRect();
 const CarrotSize = 80;
@@ -7,9 +9,6 @@ const GameDurationSec = 5;
 const playBtn = document.querySelector('.play__btn');
 const GameTimer = document.querySelector('.play__timer');
 const gameScore = document.querySelector('.game__score');
-const gamePopup = document.querySelector('.game__pop_up');
-const popUpText = document.querySelector('.replay__text');
-const popUpBtn = document.querySelector('.replay__btn');
 
 const carrotSound = new Audio('sound/carrot_pull.mp3');
 const bgSound = new Audio('sound/bg.mp3');
@@ -23,6 +22,11 @@ let started = false; // 게임이 시작되었는지 안되었는지
 let score = 0; //최종적인 점수
 let timer = undefined;
 
+const gameFinishBanner = new Popup();
+gameFinishBanner.setClickListener(()=>{
+    startGame();
+})
+
 field.addEventListener('click', onFiledClick);
 
 playBtn.addEventListener('click', () => {
@@ -33,10 +37,6 @@ playBtn.addEventListener('click', () => {
     }
 });
 
-popUpBtn.addEventListener('click', ()=> {
-    startGame();
-    hidePopup();
-});
 
 function startGame(){
     started = true;
@@ -50,7 +50,7 @@ function startGame(){
 function stopGame(){
     started = false;
     hideGameButton();
-    showPopUpWithText('Replay❓'); 
+    gameFinishBanner.showWithText('Replay❓');
     stopGameTimer(); 
     stopSound(bgSound);
     playSound(alertSound);
@@ -65,7 +65,7 @@ function finishGame(win){
         playSound(bugPullSound);
     }
     stopSound(bgSound);
-    showPopUpWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
+    gameFinishBanner.showWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
 };
 
 function startGameTimer(){
@@ -87,14 +87,6 @@ function updateTimerText(time) {
     GameTimer.innerText =`${minutes} : ${seconds}`
 }
 
-function showPopUpWithText(text){
-    popUpText.innerText = text;
-    gamePopup.classList.remove('replay--hide');
-}
-
-function hidePopup(){
-    gamePopup.classList.add('replay--hide');
-}
 
 function stopGameTimer(){ 
     clearInterval(timer);

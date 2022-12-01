@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5ed7ca1980.js" crossorigin="anonymous"></script>
-    <script src="main.js" defer></script>
+    <script type="module" src="src/main.js" defer></script>
     <title>find a carrot!</title>
 </head>
 <body>
@@ -19,7 +19,9 @@
             <section class="game__filed"></section>
         </section>
         <section class="game__pop_up replay--hide">
-            <button class="replay__btn"><i class="fa-solid fa-reply"></i></button>
+            <button class="replay__btn">
+                <i class="fa-solid fa-reply"></i>
+            </button>
             <span class="replay__text"></span>
         </section>
 </body>
