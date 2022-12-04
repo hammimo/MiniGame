@@ -8,8 +8,8 @@ export default class Field{
     constructor(carrotCount, BugCount){
         this.field = document.querySelector('.game__filed');
         this.fieldRect = this.field.getBoundingClientRect();
-        this.CarrotCount = 5;
-        this.BugCount = 5;
+        this.CarrotCount = carrotCount;
+        this.BugCount = BugCount;
         this.field.addEventListener('click', this.onClick);
 
     }
@@ -51,7 +51,6 @@ export default class Field{
         this.field.innerHTML = ' ';
         this._addItem('carrot', this.CarrotCount , 'img/carrot.png');
         this._addItem('bug', this.BugCount , 'img/bug.png');
-
     }
 }
 
