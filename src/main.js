@@ -1,5 +1,5 @@
 import Popup from './popup.js';
-import GameBulder from './game.js';
+import GameBulder, { Reason } from './game.js';
 
 
 const gameFinishBanner = new Popup();
@@ -11,16 +11,15 @@ const game = new GameBulder()
 
 
 game.setGameStopListener((reason)=>{
-    console.log(reason);
     let message;
     switch (reason) {
-        case 'cancel':
+        case Reason.cancel:
             message = 'Replay❓';
             break;
-        case 'win':
+        case Reason.win:
             message = 'YOU WON 👍';
             break;
-        case 'lose':
+        case Reason.lose:
             message = 'YOU LOST😒';
             break;
         default:
