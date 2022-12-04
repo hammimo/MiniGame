@@ -4,7 +4,7 @@ import Game from './game.js';
 
 const gameFinishBanner = new Popup();
 gameFinishBanner.setClickListener(()=>{
-    startGame();
+    // startGame();
 });
 
 

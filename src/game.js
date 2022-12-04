@@ -25,17 +25,17 @@ export default class Game {
     }
 
     setGameStopListener(onGameStop){
-        this.onGameStop= onGameStop;
+        this.onGameStop = onGameStop;
     }
 
-    onItemClick =(item) =>{
+    onItemClick = (item) =>{
         if(!this.started){
             return;
         }
         if(item ==='carrot'){
             this.score++;
             this.updateScoreBoard();
-            if(this.score === this.CarrotCount){
+            if(this.score === this.carrotCount){
                 this.finish(true);
             }
         } else if (item === ('bug')){
