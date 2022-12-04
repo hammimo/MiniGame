@@ -1,17 +1,36 @@
 import Popup from './popup.js';
-import Game from './game.js';
+import GameBulder from './game.js';
 
 
 const gameFinishBanner = new Popup();
-gameFinishBanner.setClickListener(()=>{
-    // startGame();
-});
+const game = new GameBulder()
+    .gameDuration(10)
+    .carrotCount(7)
+    .bugCount(7)
+    .build();
 
 
-
-const game = new Game(5, 3, 3);
 game.setGameStopListener((reason)=>{
     console.log(reason);
+    let message;
+    switch (reason) {
+        case 'cancel':
+            message = 'Replay❓';
+            break;
+        case 'win':
+            message = 'YOU WON 👍';
+            break;
+        case 'lose':
+            message = 'YOU LOST😒';
+            break;
+        default:
+            throw new Error ('not valid reason');
+    }
+    gameFinishBanner.showWithText(message);
+});
+
+gameFinishBanner.setClickListener(() => {
+    game.start();
 })
 
 
