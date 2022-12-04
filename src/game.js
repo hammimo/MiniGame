@@ -8,7 +8,7 @@ export const Reason = Object.freeze({
 });
 
 // Builder Pattern
-export class GameBulder {
+export default class GameBulder {
     gameDuration(duration){
         this.gameDuration = duration;
         return this;
@@ -43,7 +43,7 @@ class Game {
         this.gameScore = document.querySelector('.game__score');
         this.playBtn.addEventListener('click', () => {
             if(this.started){
-                this.stop();
+                this.stop(Reason.cancel);
             } else {
                 this.start();
             }
@@ -67,10 +67,10 @@ class Game {
             this.score++;
             this.updateScoreBoard();
             if(this.score === this.carrotCount){
-                this.finish(true);
+                this.stop(Reason.win);
             }
         } else if (item === ('bug')){
-            this.finish(false);
+            this.stop(Reason.lose);
         }
     }
 
@@ -83,28 +83,12 @@ class Game {
         this.startGameTimer();
     };
     
-    stop(){
+    stop(reason){
         this.started = false;
         this.hideGameButton();
-        // this.gameFinishBanner.showWithText('Replay❓');
         this.stopGameTimer(); 
         sound.stopPlayBackGround();
-        sound.playAlert();
-        this.onGameStop && this.onGameStop(Reason.cancel);
-    };
-
-    finish(win){
-        this.started = false;
-        this.hideGameButton();
-        if(win){
-            sound.playWin();
-        }else {
-            sound.playBug();
-        }
-        this.stopGameTimer();
-        sound.stopPlayBackGround();
-        // this.gameFinishBanner.showWithText(win? 'YOU WON 👍' : 'YOU LOST😒');
-        this.onGameStop && this.onGameStop(win? Reason.win : Reason.lose);
+        this.onGameStop && this.onGameStop(reason);
     };
 
     
@@ -114,7 +98,7 @@ class Game {
     this.timer = setInterval(()=> {
         if(remainingTimeSec <= 0) {
             clearInterval(this.timer);
-            this.finish(this.CarrotCount === this.score);
+            this.finish(this.CarrotCount === this.score ? Reason.win : Reason.lose);
            return;
         } 
         this.updateTimerText(--remainingTimeSec);
